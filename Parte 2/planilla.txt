@@ -1,0 +1,11 @@
+Persona1,0,20
+Persona2,5,35
+Persona3,10,30
+Persona4,11,25
+Persona5,14,40
+Persona6,20,20
+Persona7,23,30
+Persona1,24,25
+Persona8,25,35
+Persona9,30,15
+Persona10,37,25
