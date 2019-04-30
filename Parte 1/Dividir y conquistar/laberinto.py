@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sys
 import random
 import math
@@ -11,13 +10,17 @@ listaOrientaciones = [VERTICAL, HORIZONTAL]
 #Crea la matriz que contendra el laberinto (inicialmente esta vacia).
 def crearMatriz(filas, columnas):
 	
-	return [[' ' for x in range(columnas)] for y in range(filas)] 
+	return [[' ' for x in range(filas)] for y in range(columnas)] 
 
+#Los parametros se ajustan al modelo de que las paredes son infinitesimales
+#entonces el laberinto tiene tantas filas y columnas como las indicadas pero
+#como no se pueden dibujar paredes infinitesimales se agregan filas y columnas
+#para poder dibujarlas.
 def obtenerParametros():
 	
 	if (len(sys.argv) != 3):
 		raise Exception()
-	return [int(sys.argv[1]), int(sys.argv[2])]
+	return [2*int(sys.argv[1])-1, 2*int(sys.argv[2])-1]
 
 #Utiliza un criterio euristico para determinar la orientacion de la pared.
 #Es el mejor metodo encontrado por nosotros para tener mejor distribucion de paredes.
@@ -30,14 +33,29 @@ def determinarOrientacionPared(ancho, alto):
 	else:
 		return random.choice(listaOrientaciones)
 
+#Determina la posicion mas cercana al centro de la habitacion que sea impar
+def determinarCentroImpar(dimension):
+	mitad = dimension / 2
+	pisoMitad = int(math.floor(mitad))
+
+	if (pisoMitad % 2 == 1):
+		return pisoMitad
+	elif (abs(pisoMitad + 1 - mitad) < abs(pisoMitad - 1 - mitad)):
+		return pisoMitad + 1
+	else:
+		return pisoMitad - 1 
+	
+
+#La idea es que la pared este en el centro de la habitacion.
+#Notas que x e y son siempre pares.
 def determinarPosicionInicialPared(x, y, ancho, alto, orientacion):
 
 	if (orientacion == VERTICAL):
-		xPared = x + random.choice(range(1, ancho - 1, 2))
+		xPared = x + determinarCentroImpar(ancho)
 		yPared = y
 	else:
 		xPared = x
-		yPared = y + random.choice(range(1, alto - 1, 2))
+		yPared = y + determinarCentroImpar(alto)
 
 	return [xPared, yPared]
 
@@ -82,38 +100,29 @@ def determinarSimboloMarco(fila):
 	return '+'
 
 def imprimirLaberinto(matriz, ancho, alto):
-	print('+-' * int(math.ceil((ancho + 2) / 2)), end = '')
-	print('+')
+
+	archivo = open('mapa-laberinto.txt', 'w')
+
+	archivo.write('+-' * int(math.ceil((ancho + 2) / 2)))
+	archivo.write('+\n')
 
 
-	for i in range(ancho):
+	for i in range(alto):
 		marco = determinarSimboloMarco(i)
 
 		#Determina si es puerta de entrada o marco del laberinto.
-		print(' ' if (i == 0) else marco, end = '')
+		archivo.write(' ' if (i == 0) else marco)
 
-		for j in range(alto):
-			print(matriz[i][j], end = '')
+		for j in range(ancho):
+			archivo.write(matriz[i][j])
 
 		#Determina si es puerta de salida o marco del laberinto.
-		print(' ' if (i == ancho - 1) else marco, end = '')
+		archivo.write(' ' if (i == alto - 1) else marco)
 
-		print('\n', end = '')
+		archivo.write('\n')
 
-	print('+-' * int(math.ceil((ancho + 2) / 2)), end = '')
-	print('+')
-
-#Se fuerza el uso de  cantidades de filas y columnas impares para que no existan 'habitaciones'
-def validarParametros(parametros):
-
-	if(parametros[0] % 2 == 0):
-		parametros[0] += 1;
-		print('Las filas deben ser numeros impares. Se utilizaran ' + str(parametros[0]) + ' filas.')
-
-	if(parametros[1] % 2 == 0):
-		parametros[1] += 1;
-		print('Las columnas deben ser numeros impares. Se utilizaran ' + str(parametros[1]) + ' columnas.\n')
-
+	archivo.write('+-' * int(math.ceil((ancho + 2) / 2)))
+	archivo.write('+\n')
 
 def ponerPared(matriz, x, y, ancho, alto):
 
@@ -154,10 +163,8 @@ def main():
 	try:
 		parametros = obtenerParametros()
 	except:
-		print('Faltan parametros, la sintaxis correcta es: laberinto <anchoGrilla> <altoGrilla>. \nTenga en cuenta que no es posible generar un laberinto con cantidad de filas o columnas pares. ')
+		print('Faltan parametros, la sintaxis correcta es: laberinto <anchoGrilla> <altoGrilla>.')
 		return
-
-	validarParametros(parametros)
 
 	matriz = crearMatriz(parametros[0], parametros[1])
 	ponerPared(matriz, 0, 0, parametros[0], parametros[1])
