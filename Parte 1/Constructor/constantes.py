@@ -1,0 +1,4 @@
+VERTICAL = 0
+HORIZONTAL = 1
+
+lista_orientaciones = [VERTICAL, HORIZONTAL]
