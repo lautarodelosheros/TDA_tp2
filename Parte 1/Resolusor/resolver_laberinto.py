@@ -4,5 +4,5 @@ from generar_archivo_salida import generar_archivo_salida
 
 def resolver_laberinto(archivo):
     grafo, matriz, origen, destino, largo, ancho = generar_grafo(archivo)
-    padres, orden, lista_camino, longitud = obtener_laberinto_y_longitud(grafo, origen, destino)
+    lista_camino, longitud = obtener_laberinto_y_longitud(grafo, origen, destino)
     generar_archivo_salida(grafo, matriz, lista_camino, longitud, largo, ancho)

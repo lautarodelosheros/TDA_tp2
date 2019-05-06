@@ -3,7 +3,7 @@ from cola import *
 def obtener_laberinto_y_longitud(grafo, origen, destino):
     padres, orden = BFS(grafo, origen)
     lista_camino = obtener_camino(padres, origen, destino)
-    return (padres, orden, lista_camino, orden[destino])
+    return (lista_camino, orden[destino])
 
 def BFS(grafo, origen):
     visitados = set()
