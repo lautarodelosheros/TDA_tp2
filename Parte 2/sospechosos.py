@@ -18,10 +18,11 @@ def investigar(entradas, salidas, archivo_salida):
     visitantes = []
     indice_entradas = 0
     indice_salidas = 0
+    ultima_salida = 0
 
     for i in range(len(entradas) * 2):
         # Si es una entrada
-        if len(entradas) > indice_entradas and (len(salidas) == 0 or len(salidas) < indice_salidas or entradas[indice_entradas].hora_entrada <= salidas[indice_salidas].hora_salida):
+        if len(entradas) > indice_entradas and (len(salidas) == 0 or len(salidas) < indice_salidas or entradas[indice_entradas].hora_entrada < salidas[indice_salidas].hora_salida):
             visitante = entradas[indice_entradas]
             visitantes.append(visitante)
             indice_entradas += 1
@@ -29,9 +30,11 @@ def investigar(entradas, salidas, archivo_salida):
         else:
             visitante = salidas[indice_salidas]
             duracion = visitante.hora_salida - visitantes[0].hora_entrada
-            if 40 <= duracion <= 120:
+            if ultima_salida != visitante.hora_salida and 40 <= duracion <= 120:
                 if 5 <= len(visitantes) <= 10:
+                    print(visitante.nombre)
                     generar_sospechosos(visitantes, duracion, archivo_salida)
+            ultima_salida = visitante.hora_salida
             visitantes.remove(visitante)
             indice_salidas += 1
 

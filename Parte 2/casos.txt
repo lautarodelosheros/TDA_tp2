@@ -1,0 +1,8 @@
+log1.txt: 7 grupos de sospechosos
+log2.txt: Sin sospechosos, no hay personas al mismo momento
+log3.txt: sin sospechosos, superan los 10 simultaneos
+log4.txt: sin sospechosos, el grupo esta mas de 120 minutos
+log5.txt: sin sospechosos, el grupo esta menos de 40 minutos
+log6.txt: 1 grupo de sospechosos, todos los del archivo
+log7.txt: 2 grupos de sospechosos. ABCDEF y GHIJKL
+log8.txt: sin sospechosos. algunas personas salen y vuelven a entrar.
