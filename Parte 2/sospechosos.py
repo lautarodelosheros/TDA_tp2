@@ -32,7 +32,6 @@ def investigar(entradas, salidas, archivo_salida):
             duracion = visitante.hora_salida - visitantes[0].hora_entrada
             if ultima_salida != visitante.hora_salida and 40 <= duracion <= 120:
                 if 5 <= len(visitantes) <= 10:
-                    print(visitante.nombre)
                     generar_sospechosos(visitantes, duracion, archivo_salida)
             ultima_salida = visitante.hora_salida
             visitantes.remove(visitante)
